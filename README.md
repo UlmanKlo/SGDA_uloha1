@@ -1,1 +1,0 @@
-# SGDA_uloha1
