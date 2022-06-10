@@ -562,6 +562,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   groundCheck: {fileID: 649367135}
+  dragNum: 10
 --- !u!212 &838107962
 SpriteRenderer:
   m_ObjectHideFlags: 0

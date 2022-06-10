@@ -829,10 +829,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10de4888d1295154aa5394835b088f82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  meteor1: {fileID: 865030523}
-  meteor2: {fileID: 1327324284}
-  meteor3: {fileID: 203929368}
-  stoneMask:
+  mMask:
     serializedVersion: 2
     m_Bits: 64
 --- !u!58 &1999475967

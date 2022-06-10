@@ -9,17 +9,21 @@ public class PlayerMovementPF : MonoBehaviour
     [SerializeField] private float speed;
     [SerializeField] private LayerMask groundMask;
     [SerializeField] private Transform groundCheck;
+    [SerializeField] private float dragNum = 5;
 
     float movementX;
     bool isGrounded;
     bool isCharging;
     float chargeLevel = 5f;
     Rigidbody2D rb;
+    float defaultSpeed;
+
 
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        defaultSpeed = speed;
     }
 
     // Update is called once per frame
@@ -54,6 +58,19 @@ public class PlayerMovementPF : MonoBehaviour
             isCharging = false;
             Jump();
         }
+
+        //Gravity
+        if (!isGrounded && rb.velocity.magnitude < 2f) rb.gravityScale = 2.8f;
+        if (isGrounded)
+        {
+            rb.gravityScale = 1f;
+            speed = defaultSpeed;
+        }
+
+        //Drag
+        if (!isGrounded && speed != 0) speed -= dragNum/100;
+
+
     }
 
     private void Jump()
