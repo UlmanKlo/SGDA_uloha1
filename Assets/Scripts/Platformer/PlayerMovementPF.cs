@@ -13,10 +13,10 @@ public class PlayerMovementPF : MonoBehaviour
 
     float movementX;
     bool isGrounded;
-    bool isCharging;
-    float chargeLevel = 5f;
     Rigidbody2D rb;
     float defaultSpeed;
+    int count;
+    bool startTiming;
 
 
     // Start is called before the first frame update
@@ -32,14 +32,8 @@ public class PlayerMovementPF : MonoBehaviour
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.15f, groundMask);
 
         movementX = Input.GetAxisRaw("Horizontal");
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded) isCharging = true;
-        if (Input.GetKeyUp(KeyCode.Space) && isGrounded)
-        {
-            isCharging = false;
-            Jump();
-        }
-
-
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded) startTiming = true;
+        if (Input.GetKeyUp(KeyCode.Space)) startTiming = false;
     }
 
     private void FixedUpdate()
@@ -49,18 +43,8 @@ public class PlayerMovementPF : MonoBehaviour
         movement = movement * speed * Time.fixedDeltaTime;
         transform.Translate(movement);
 
-        //Nabijanie skoku
-        if (isCharging && chargeLevel < 12.5)
-        {
-            chargeLevel += 0.15f;
-        } else if (isCharging)
-        {
-            isCharging = false;
-            Jump();
-        }
-
         //Gravity
-        if (!isGrounded && rb.velocity.magnitude < 2f) rb.gravityScale = 2.8f;
+        if (!isGrounded && rb.velocity.magnitude < 0.5f) rb.gravityScale = 2.8f;
         if (isGrounded)
         {
             rb.gravityScale = 1f;
@@ -71,12 +55,32 @@ public class PlayerMovementPF : MonoBehaviour
         if (!isGrounded && speed != 0) speed -= dragNum/100;
 
 
+        //Jump
+        if (count > 10 && isGrounded)
+        {
+            BigJump();
+        }
+        else if (!startTiming && 0 < count && count <= 18) Jump();
+
+        //Timing
+        if (startTiming) Timing();
+        else count = 0;
+
+
     }
 
     private void Jump()
     {
-        rb.AddForce(new Vector2(0f, chargeLevel), ForceMode2D.Impulse);
-        chargeLevel = 5f;
+        rb.AddForce(new Vector2(0f, 8.5f), ForceMode2D.Impulse);
     }
 
+    private void BigJump()
+    {
+        rb.AddForce(new Vector2(0f, 12f), ForceMode2D.Impulse);
+    }
+
+    private void Timing()
+    {
+        count++;
+    }
 }
